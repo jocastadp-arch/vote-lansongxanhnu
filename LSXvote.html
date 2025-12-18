@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LSX Vote Tracker</title>
+<title>LSX Vote Tracker – Realtime</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -139,53 +139,6 @@ button.small{
 }
 .close{font-size:22px;font-weight:700;cursor:pointer}
 label{display:inline-block;margin:6px 14px 6px 0}
- /* ===== FOOTER ===== */
-footer{
- margin-top:40px;
- padding:28px 16px;
- text-align:center;
- background:linear-gradient(180deg,#0d9488,#064e4a);
- color:#ecfdf5;
- border-top-left-radius:24px;
- border-top-right-radius:24px;
-}
-
-.footer-title{
- font-size:20px;
- font-weight:700;
- letter-spacing:1px;
- margin-bottom:10px;
- background:linear-gradient(90deg,#5eead4,#22d3ee,#5eead4);
- -webkit-background-clip:text;
- -webkit-text-fill-color:transparent;
- background-size:200% auto;
- animation:wave 4s linear infinite;
-}
-
-@keyframes wave{
- to{background-position:200% center}
-}
-
-.footer-link a{
- color:#a7f3d0;
- font-weight:600;
- text-decoration:none;
-}
-.footer-link a:hover{
- text-decoration:underline;
-}
-
-.footer-note{
- margin-top:12px;
- font-size:13px;
- color:#ccfbf1;
- line-height:1.6;
-}
-
-@media(min-width:1024px){
- .footer-title{font-size:22px}
-}
-
 </style>
 </head>
 
@@ -201,15 +154,15 @@ footer{
 <!-- ===== ARTISTS ===== -->
 <section id="artistsSection" class="active">
 <div class="card">
-<h2>Bảng nghệ sĩ</h2>
+<h2>Bảng nghệ sĩ (Top 5 nổi bật)</h2>
 <div class="table-wrap">
 <table id="summaryTable">
 <tr>
-<th>Hạng</th>
+<th>#</th>
 <th>Nghệ sĩ</th>
 <th>Vote</th>
-<th>Thay đổi</th>
-<th>Quy đổi (Triệu VNĐ)</th>
+<th>+10s</th>
+<th>Triệu VNĐ</th>
 </tr>
 </table>
 </div>
@@ -407,24 +360,6 @@ initChart();
 refreshData();
 setInterval(refreshData, REFRESH_INTERVAL);
 </script>
-<footer>
- <div class="footer-title">LÀN SÓNG XANH MUSIC AWARD</div>
-
- <div class="footer-link">
-  👉 <a href="https://lansongxanh.1vote.vn/?fbclid=IwY2xjawOwsfVleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAEwAAEe0MWCtc9YuWpGYT6meDN-3FbVgV1tENE0Y4lZFXaem9lKTjb1c0CA2BOusZE_aem_nx7olkxnS2Qsiu3WcuBnhA"
-      target="_blank" rel="noopener noreferrer">
-     Truy cập trang vote chính thức
-     </a>
- </div>
-
- <div class="footer-note">
-  © Bản quyền thuộc về <strong>Eventista</strong><br>
-  Phát triển bởi người hâm mộ Nghệ Sĩ <strong>LYHAN</strong>
- </div>
-</footer>
 
 </body>
 </html>
-
-
-
