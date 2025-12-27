@@ -3,363 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LSX Vote Tracker – Realtime</title>
-
+<title>LSX Vote Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
 
 <style>
 :root{
- --primary:#0f766e;
- --primary-dark:#064e4a;
- --bg:#ecfdf5;
- --card:#d1fae5;
- --text:#022c22;
+ --primary:#0f766e; --primary-dark:#064e4a;
+ --bg:#ecfdf5; --card:#d1fae5; --text:#022c22;
 }
-
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Montserrat,sans-serif;
- background:var(--bg);
- color:var(--text);
- font-size:15px;
-}
-
-header{
- background:linear-gradient(90deg,var(--primary),var(--primary-dark));
- color:#fff;
- padding:24px;
- text-align:center;
- font-size:26px;
- font-weight:700;
-}
-
-/* ===== TABS ===== */
-nav{
- display:flex;
- justify-content:center;
- gap:14px;
- background:#0d9488;
- padding:14px;
- flex-wrap:wrap;
-}
-nav button{
- border:none;
- padding:12px 30px;
- border-radius:999px;
- background:rgba(255,255,255,.2);
- color:white;
- font-size:16px;
- font-weight:700;
- cursor:pointer;
-}
-nav button.active{
- background:white;
- color:var(--primary-dark);
-}
-
+body{margin:0;font-family:Montserrat,sans-serif;background:var(--bg);color:var(--text);}
+header{background:linear-gradient(90deg,var(--primary),var(--primary-dark));color:#fff;padding:24px;text-align:center;font-size:26px;font-weight:700}
+nav{display:flex;justify-content:center;gap:14px;background:#0d9488;padding:14px;flex-wrap:wrap}
+nav button{border:none;padding:12px 28px;border-radius:999px;background:rgba(255,255,255,.2);color:white;font-size:15px;font-weight:700;cursor:pointer}
+nav button.active{background:white;color:var(--primary-dark)}
+.last-update{padding:6px 20px;font-size:12px;color:#064e4a;font-weight:600;text-align:right;}
 section{display:none;padding:20px}
 section.active{display:block}
-
-.card{
- background:var(--card);
- border-radius:18px;
- padding:20px;
- box-shadow:0 8px 22px rgba(0,0,0,.1);
-}
-
+.card{background:var(--card);border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(0,0,0,.1)}
 h2{margin-top:0;font-size:22px}
 
-/* ===== TABLE ===== */
+/* TABLE */
 .table-wrap{overflow-x:auto}
-table{
- width:100%;
- min-width:560px;
- border-collapse:collapse;
-}
-th,td{
- padding:10px;
- border-bottom:1px solid #99d5c8;
- font-size:14px;
-}
+table{width:100%;border-collapse:collapse;min-width:400px}
+th,td{padding:10px;border-bottom:1px solid #99d5c8;font-size:14px;text-align:center;white-space:nowrap}
 th{background:#5eead4}
 .vote-up{color:#047857;font-weight:700}
-
-/* ===== TOP 5 ===== */
 .top1{background:#fde68a;font-weight:700}
 .top2{background:#e5e7eb;font-weight:700}
 .top3{background:#fed7aa;font-weight:700}
 .top45{background:#ccfbf1}
 
-/* ===== BUTTON ===== */
-button.small{
- padding:10px 18px;
- border:none;
- border-radius:10px;
- background:var(--primary);
- color:white;
- font-weight:600;
- cursor:pointer;
-}
+/* BUTTONS */
+button.small, select.small{padding:8px 14px;border:none;border-radius:10px;background:var(--primary);color:white;font-weight:600;cursor:pointer}
 
-/* ===== CHART ===== */
-.chart-wrap{
- height:260px;
-}
-@media(min-width:1024px){
- .chart-wrap{height:320px}
-}
+/* CHART */
+.chart-wrap{height:260px}
+@media(min-width:1024px){.chart-wrap{height:320px}}
 
-/* ===== MODAL ===== */
-.modal{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.45);
- display:none;
- align-items:center;
- justify-content:center;
- z-index:1000;
-}
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1000}
 .modal.active{display:flex}
-.modal-content{
- background:#ecfdf5;
- width:92%;
- max-width:520px;
- max-height:80vh;
- overflow:auto;
- border-radius:18px;
- padding:22px;
-}
-.modal-header{
- display:flex;
- justify-content:space-between;
- align-items:center;
-}
+.modal-content{background:#ecfdf5;width:92%;max-width:520px;max-height:80vh;overflow:auto;border-radius:18px;padding:22px}
+.modal-header{display:flex;justify-content:space-between;align-items:center}
 .close{font-size:22px;font-weight:700;cursor:pointer}
 label{display:inline-block;margin:6px 14px 6px 0}
+
+/* FOOTER */
+footer{margin-top:40px;padding:28px 16px;text-align:center;background:linear-gradient(180deg,#0d9488,#064e4a);color:#ecfdf5;border-top-left-radius:24px;border-top-right-radius:24px}
+.footer-title{font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:10px;background:linear-gradient(90deg,#5eead4,#22d3ee,#5eead4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:wave 4s linear infinite}
+@keyframes wave{to{background-position:200% center}}
+.footer-link a{color:#a7f3d0;font-weight:600;text-decoration:none}
+.footer-note{margin-top:12px;font-size:13px;color:#ccfbf1;line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+ h2{font-size:18px}
+ th,td{padding:6px;font-size:12px}
+ nav button{padding:8px 14px;font-size:13px}
+ .last-update{text-align:left;padding-left:8px;font-size:11px}
+}
 </style>
 </head>
-
 <body>
 
-<header>LSX Vote Tracker – Realtime</header>
+<header>LSX Vote Tracker</header>
 
 <nav>
 <button id="tabArtists" class="active">Nghệ sĩ</button>
 <button id="tabChart">Biểu đồ</button>
+<button id="tabHistory">Lịch sử</button>
 </nav>
 
-<!-- ===== ARTISTS ===== -->
+<div class="last-update" id="lastUpdate">Cập nhật lần cuối: --:--:--</div>
+
 <section id="artistsSection" class="active">
 <div class="card">
-<h2>Bảng nghệ sĩ (Top 5 nổi bật)</h2>
-<div class="table-wrap">
-<table id="summaryTable">
-<tr>
-<th>#</th>
-<th>Nghệ sĩ</th>
-<th>Vote</th>
-<th>+10s</th>
-<th>Triệu VNĐ</th>
-</tr>
-</table>
-</div>
+<h2>Bảng nghệ sĩ</h2>
+<div class="table-wrap"><table id="summaryTable"></table></div>
 </div>
 </section>
 
-<!-- ===== CHART ===== -->
 <section id="chartSection">
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
 <h2>Biểu đồ tăng trưởng</h2>
 <button class="small" onclick="openModal()">Chọn nghệ sĩ</button>
 </div>
-<div class="chart-wrap">
-<canvas id="voteChart"></canvas>
-</div>
+<div class="chart-wrap"><canvas id="voteChart"></canvas></div>
 </div>
 </section>
 
-<!-- ===== MODAL ===== -->
+<section id="historySection">
+<div class="card">
+<h2>Lịch sử xếp hạng</h2>
+<div style="margin-bottom:12px">
+<select id="historyFilter" class="small" onchange="renderHistory()">
+<option value="10">10 phút</option>
+<option value="30">30 phút</option>
+<option value="60">1 giờ</option>
+<option value="300">5 giờ</option>
+<option value="720">12 giờ</option>
+</select>
+</div>
+<div class="table-wrap"><table id="historyTable"></table></div>
+</div>
+</section>
+
 <div id="artistModal" class="modal">
 <div class="modal-content">
 <div class="modal-header">
 <h3>Chọn nghệ sĩ hiển thị</h3>
 <span class="close" onclick="closeModal()">×</span>
 </div>
-
 <div style="margin:12px 0">
 <button class="small" onclick="selectAll()">Chọn tất cả</button>
 <button class="small" onclick="clearAll()">Bỏ chọn</button>
 </div>
-
 <div id="controls"></div>
-
-<div style="text-align:right;margin-top:16px">
-<button class="small" onclick="closeModal()">Đóng</button>
-</div>
 </div>
 </div>
 
 <script>
-const API_URL = "https://lsxvote.jdiep72.workers.dev/";
-const REFRESH_INTERVAL = 10000;
+const API_URL="https://lsxvote.jdiep72.workers.dev/";
+const REFRESH_INTERVAL=10000;
+let chart, artistsMap={}, lastVotes={};
+const HISTORY_KEY="lsx_vote_history", HISTORY_INTERVALS=[10,30,60,300,720];
+let lastHistorySave=JSON.parse(localStorage.getItem("lsx_last_save")||"{}");
 
-let chart;
-let artistsMap = {};
-let lastVotes = {};
+const sections={artists:document.getElementById("artistsSection"), chart:document.getElementById("chartSection"), history:document.getElementById("historySection")};
+const summaryTable=document.getElementById("summaryTable");
+const historyTable=document.getElementById("historyTable");
+const lastUpdate=document.getElementById("lastUpdate");
+const tabs={artists:document.getElementById("tabArtists"), chart:document.getElementById("tabChart"), history:document.getElementById("tabHistory")};
+const controls=document.getElementById("controls");
 
-/* ===== TABS ===== */
-tabArtists.onclick = function(){showTab('artists')};
-tabChart.onclick = function(){showTab('chart')};
-
+Object.keys(tabs).forEach(t=>tabs[t].onclick=()=>showTab(t));
 function showTab(t){
- artistsSection.classList.toggle('active', t==='artists');
- chartSection.classList.toggle('active', t==='chart');
- tabArtists.classList.toggle('active', t==='artists');
- tabChart.classList.toggle('active', t==='chart');
+  Object.keys(sections).forEach(k=>sections[k].classList.toggle("active",k===t));
+  Object.keys(tabs).forEach(k=>tabs[k].classList.toggle("active",k===t));
+  if(t==="history") renderHistory();
 }
-
-/* ===== MODAL ===== */
-function openModal(){artistModal.classList.add('active')}
-function closeModal(){artistModal.classList.remove('active')}
-
-/* ===== CHART ===== */
-function randomColor(){
- return "hsl("+(Math.random()*360)+",70%,45%)";
-}
-
+function updateLastUpdate(){lastUpdate.textContent="Cập nhật lần cuối: "+new Date().toLocaleTimeString();}
+function openModal(){document.getElementById("artistModal").classList.add("active");}
+function closeModal(){document.getElementById("artistModal").classList.remove("active");}
+function randomColor(){return `hsl(${Math.random()*360},70%,45%)`;}
 function initChart(){
- chart = new Chart(voteChart,{
-  type:'line',
-  data:{labels:[],datasets:[]},
-  options:{
-   responsive:true,
-   maintainAspectRatio:false,
-   animation:false,
-   interaction:{mode:'nearest',intersect:false},
-   elements:{line:{tension:0.35},point:{radius:0}},
-   plugins:{
-    legend:{display:false},
-    zoom:{
-     pan:{enabled:true,mode:'x'},
-     zoom:{wheel:{enabled:true},pinch:{enabled:true},mode:'x'}
+  chart=new Chart(voteChart,{
+    type:"line",
+    data:{labels:[], datasets:[]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:false, elements:{line:{tension:.35}, point:{radius:0}},
+      plugins:{legend:{display:false}}
     }
-   }
-  }
- });
+  });
 }
 
-function toggleDataset(i){
- chart.data.datasets[i].hidden = !chart.data.datasets[i].hidden;
- renderControls();
- chart.update();
-}
-
-/* ===== CONTROLS (FIXED) ===== */
 function renderControls(){
- controls.innerHTML = '';
- chart.data.datasets.forEach(function(ds,i){
-  let l = document.createElement('label');
-  l.innerHTML =
-   '<input type="checkbox" '+
-   (ds.hidden ? '' : 'checked')+
-   ' onchange="toggleDataset('+i+')"> '+
-   ds.label;
-  controls.appendChild(l);
- });
+  controls.innerHTML="";
+  chart.data.datasets.forEach((ds,i)=>{
+    const cb=document.createElement("input");
+    cb.type="checkbox"; cb.checked=!ds.hidden;
+    cb.onchange=()=>{ds.hidden=!cb.checked; chart.update();}
+    const label=document.createElement("label");
+    label.appendChild(cb); label.appendChild(document.createTextNode(" "+ds.label));
+    controls.appendChild(label);
+  });
 }
+function selectAll(){chart.data.datasets.forEach(d=>d.hidden=false); renderControls(); chart.update();}
+function clearAll(){chart.data.datasets.forEach(d=>d.hidden=true); renderControls(); chart.update();}
 
-function selectAll(){
- chart.data.datasets.forEach(function(d){
-  d.hidden = false;
- });
- renderControls();
- chart.update();
-}
-
-function clearAll(){
- chart.data.datasets.forEach(function(d){
-  d.hidden = true;
- });
- renderControls();
- chart.update();
-}
-
-/* ===== TABLE ===== */
 function updateTable(list){
- summaryTable.innerHTML =
- '<tr><th>#</th><th>Nghệ sĩ</th><th>Vote</th><th>+10s</th><th>Triệu VNĐ</th></tr>';
-
- list.sort(function(a,b){return b.points-a.points});
-
- list.forEach(function(a,i){
-  let money = ((a.points/10)*0.003).toFixed(3);
-  let cls = '';
-  if(i===0) cls='top1';
-  else if(i===1) cls='top2';
-  else if(i===2) cls='top3';
-  else if(i<5) cls='top45';
-
-  summaryTable.innerHTML +=
-  '<tr class="'+cls+'">'+
-   '<td>'+(i===0?'🏆':i+1)+'</td>'+
-   '<td>'+a.name+'</td>'+
-   '<td>'+a.points+'</td>'+
-   '<td class="vote-up">'+(a.diff>0?('+'+a.diff):'0')+'</td>'+
-   '<td>'+money+'</td>'+
-  '</tr>';
- });
+  const frag=document.createDocumentFragment();
+  summaryTable.innerHTML=`<tr><th>Hạng</th><th>Nghệ sĩ</th><th>Vote</th><th>Thay đổi</th><th>Triệu VNĐ</th></tr>`;
+  list.sort((a,b)=>b.points-a.points).forEach((a,i)=>{
+    const tr=document.createElement("tr");
+    tr.className=i===0?"top1":i===1?"top2":i===2?"top3":i<5?"top45":"";
+    tr.innerHTML=`<td>${i===0?"🏆":i+1}</td><td>${a.name}</td><td>${a.points}</td><td class="vote-up">${a.diff>0?`+${a.diff}`:"0"}</td><td>${((a.points/10)*0.003).toFixed(3)}</td>`;
+    frag.appendChild(tr);
+  });
+  summaryTable.appendChild(frag);
 }
 
-/* ===== DATA ===== */
+function saveHistory(summary){
+  const now=Date.now();
+  let history=JSON.parse(localStorage.getItem(HISTORY_KEY)||"{}");
+  HISTORY_INTERVALS.forEach(min=>{
+    const ms=min*60000;
+    if(!lastHistorySave[min]||now-lastHistorySave[min]>=ms){
+      history[min]=history[min]||[];
+      const prev=(history[min].length>0)?history[min][history[min].length-1].data:[];
+      const snapshot=summary.map(s=>{
+        const prevPoints=(prev.find(p=>p.name===s.name)||{points:0}).points;
+        return {name:s.name, points:s.points, diff:s.points-prevPoints};
+      });
+      history[min].push({time:new Date().toLocaleString(), data:snapshot});
+      lastHistorySave[min]=now;
+    }
+  });
+  localStorage.setItem(HISTORY_KEY,JSON.stringify(history));
+  localStorage.setItem("lsx_last_save",JSON.stringify(lastHistorySave));
+}
+
+function renderHistory(){
+  const min=document.getElementById("historyFilter").value;
+  const history=JSON.parse(localStorage.getItem(HISTORY_KEY)||"{}");
+  historyTable.innerHTML=`<tr><th>Thời điểm</th><th>Hạng</th><th>Nghệ sĩ</th><th>Vote</th><th>Thay đổi</th></tr>`;
+  if(!history[min]) return;
+  const frag=document.createDocumentFragment();
+  history[min].slice().reverse().forEach(b=>{
+    b.data.sort((a,b)=>b.points-a.points).forEach((a,i)=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td>${b.time}</td><td>${i+1}</td><td>${a.name}</td><td>${a.points}</td><td class="vote-up">${a.diff>0?`+${a.diff}`:a.diff<0?`${a.diff}`:"0"}</td>`;
+      frag.appendChild(tr);
+    });
+  });
+  historyTable.appendChild(frag);
+}
+
 async function refreshData(){
- let res = await fetch(API_URL);
- let json = await res.json();
-
- let products = [];
- if(json && json.data && json.data.products){
-  products = json.data.products;
- }
-
- let time = new Date().toLocaleTimeString();
- chart.data.labels.push(time);
-
- let summary = [];
-
- products.forEach(function(p){
-  if(!artistsMap[p.id]){
-   let ds = {
-    label:p.name,
-    data:[],
-    borderColor:randomColor(),
-    borderWidth:2
-   };
-   artistsMap[p.id] = ds;
-   chart.data.datasets.push(ds);
-  }
-
-  let points = p.points || 0;
-  artistsMap[p.id].data.push(points);
-
-  let diff = points - (lastVotes[p.id] || 0);
-  lastVotes[p.id] = points;
-
-  summary.push({name:p.name,points:points,diff:diff});
- });
-
- chart.update();
- renderControls();
- updateTable(summary);
+  try{
+    const resp=await fetch(API_URL);
+    const products=(await resp.json())?.data?.products||[];
+    if(!products.length) return;
+    const summary=[];
+    chart.data.labels.push(new Date().toLocaleTimeString());
+    products.forEach(p=>{
+      if(!artistsMap[p.id]){
+        artistsMap[p.id]={label:p.name,data:[],borderColor:randomColor(),borderWidth:2};
+        chart.data.datasets.push(artistsMap[p.id]);
+      }
+      const pts=p.points||0;
+      const diff=lastVotes[p.id]!==undefined?pts-lastVotes[p.id]:0;
+      lastVotes[p.id]=pts;
+      artistsMap[p.id].data.push(pts);
+      summary.push({name:p.name, points:pts, diff});
+    });
+    chart.update();
+    renderControls();
+    updateTable(summary);
+    saveHistory(summary);
+    updateLastUpdate();
+  } catch(e){console.error("Error fetching data:", e);}
 }
 
-/* ===== INIT ===== */
-initChart();
-refreshData();
-setInterval(refreshData, REFRESH_INTERVAL);
+initChart(); refreshData(); setInterval(refreshData, REFRESH_INTERVAL);
 </script>
+
+<footer>
+<div class="footer-title">LÀN SÓNG XANH MUSIC AWARD</div>
+<div class="footer-link">👉 <a href="https://lansongxanh.1vote.vn/" target="_blank">Truy cập trang vote chính thức</a></div>
+<div class="footer-note">© Bản quyền thuộc về <strong>Eventista</strong><br>Phát triển bởi người hâm mộ Nghệ Sĩ <strong>LYHAN</strong></div>
+</footer>
 
 </body>
 </html>
